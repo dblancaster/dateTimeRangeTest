@@ -13,7 +13,15 @@ class DateTimeService
 
     public function calculateFromAndToRanges($state, DateTime $from, DateTime $to): CalculatedResponseData
     {
-        $calculations = new CalculatedResponseData(clone $from, $to);
+        $calculations = new CalculatedResponseData($state, clone $from, clone $to);
+        $this->calculateDaysInRange($calculations);
+        return $calculations;
+    }
+
+    public function calculateDaysInRange(CalculatedResponseData $calculations)
+    {
+        $from = clone $calculations->from;
+        $to = clone $calculations->to;
         $totalDays = 0;
         $weekendDays = 0;
         $publicHolidayDays = 0;
@@ -28,12 +36,34 @@ class DateTimeService
             $from->modify('+1 day');
         }
         $calculations->totalDays = $totalDays;
+
         $calculations->daysSkippingWeekends = $totalDays - $weekendDays;
         $calculations->daysSkippingPublicHolidays = $totalDays - $publicHolidayDays;
         $calculations->daysSkippingWeekendAndPublicHolidays = $totalDays - $weekendDays - $publicHolidayDays;
 
-        $calculations->entireWeeksBetween = floor($calculations->to->diff($calculations->from)->days / 7);
-        return $calculations;
+        $diff = $calculations->to->diff($calculations->from);
+        $calculations->entireWeeksBetween = floor($diff->days / 7);
+        $calculations->totalYears = $diff->y;
+
+        $this->calculateSecondsMinutesHours($calculations);
+    }
+
+    public function calculateSecondsMinutesHours(CalculatedResponseData $calculations)
+    {
+        $calculations->secondsSkippingWeekends = $calculations->daysSkippingWeekends * 86400;
+        $calculations->secondsSkippingPublicHolidays = $calculations->daysSkippingPublicHolidays * 86400;
+        $calculations->secondsSkippingWeekendAndPublicHolidays = $calculations->daysSkippingWeekendAndPublicHolidays * 86400;
+        $calculations->totalSeconds = $calculations->totalDays * 86400;
+
+        $calculations->minutesSkippingWeekends = $calculations->daysSkippingWeekends * 1440;
+        $calculations->minutesSkippingPublicHolidays = $calculations->daysSkippingPublicHolidays * 1440;
+        $calculations->minutesSkippingWeekendAndPublicHolidays = $calculations->daysSkippingWeekendAndPublicHolidays * 1440;
+        $calculations->totalMinutes = $calculations->totalDays * 1440;
+
+        $calculations->hoursSkippingWeekends = $calculations->daysSkippingWeekends * 24;
+        $calculations->hoursSkippingPublicHolidays = $calculations->daysSkippingPublicHolidays * 24;
+        $calculations->hoursSkippingWeekendAndPublicHolidays = $calculations->daysSkippingWeekendAndPublicHolidays * 24;
+        $calculations->totalHours = $calculations->totalDays * 24;
     }
 
     public function isDateOnAWeekend(DateTime $dateTime): bool

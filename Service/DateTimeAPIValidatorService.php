@@ -30,11 +30,12 @@ class DateTimeAPIValidatorService
 
     public function validateState($request): void
     {
-        $this->state = $request["state"] ?? null;
+        $this->state = $request["stateForPublicHolidays"] ?? null;
+        $allStatesString = implode(", ", DateTimeAPIController::ALL_STATES);
         if (!isset($this->state)) {
-            $this->errors[] = "state is required";
+            $this->errors[] = "stateForPublicHolidays is required and must be one of $allStatesString";
         } else if (!in_array($this->state, DateTimeAPIController::ALL_STATES)) {
-            $this->errors[] = "state must be one of " . implode(", ", DateTimeAPIController::ALL_STATES);
+            $this->errors[] = "stateForPublicHolidays must be one of $allStatesString";
         }
     }
 

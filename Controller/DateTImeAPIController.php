@@ -18,18 +18,6 @@ class DateTimeAPIController
         self::STATE_VIC
     ];
 
-//    const ACTION_WORKING_HOURS_BETWEEN = 'workingHoursBetween';
-//    const ACTION_WORKING_DAYS_BETWEEN = 'workingDaysBetween';
-//    const ACTION_DAYS_BETWEEN = 'daysBetween';
-//    const ACTION_ENTIRE_WEEKS_BETWEEN = 'entireWeeksBetween';
-//
-//    const ALL_ACTIONS = [
-//        self::ACTION_WORKING_HOURS_BETWEEN,
-//        self::ACTION_WORKING_DAYS_BETWEEN,
-//        self::ACTION_DAYS_BETWEEN,
-//        self::ACTION_ENTIRE_WEEKS_BETWEEN
-//    ];
-
     public DateTimeService $service;
 
     public function __construct()
