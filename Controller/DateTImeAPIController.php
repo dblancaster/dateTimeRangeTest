@@ -40,7 +40,7 @@ class DateTimeAPIController
     public function getResponseData($data): array
     {
         $validator = new DateTimeAPIValidatorService();
-        $validator->validateData($data);
+        $validator->validate($data);
         if ($validator->errors) {
             return ["errors" => $validator->errors];
         }

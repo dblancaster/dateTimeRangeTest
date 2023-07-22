@@ -9,7 +9,7 @@ use DateTime;
 class DateTimeService
 {
 
-    public array $lazyLoadedPublicHolidays;
+    public ?array $lazyLoadedPublicHolidays;
 
     public function calculateFromAndToRanges($state, DateTime $from, DateTime $to): CalculatedResponseData
     {
@@ -84,6 +84,12 @@ class DateTimeService
         return array_map(fn($publicHoliday) => $publicHoliday->dateYMD, $publicHolidays);
     }
 
+    public function fetchPublicHolidaysExternally()
+    {
+        // public holiday data from http://data.gov.au
+        return file_get_contents(__DIR__ . '/example_public_holidays.json');
+    }
+
     /**
      * @return PublicHoliday[]
      */
@@ -93,9 +99,7 @@ class DateTimeService
             return $this->lazyLoadedPublicHolidays;
         }
 
-        // public holiday data from http://data.gov.au
-        $file = file_get_contents(__DIR__ . '/example_public_holidays.json');
-        $publicHolidaysArray = json_decode($file, true);
+        $publicHolidaysArray = json_decode($this->fetchPublicHolidaysExternally(), true);
 
         $publicHolidays = [];
         foreach ($publicHolidaysArray as $array) {

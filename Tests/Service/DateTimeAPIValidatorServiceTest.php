@@ -11,17 +11,17 @@ class DateTimeAPIValidatorServiceTest extends DateTimeTestBase
 
     public function runTests()
     {
-        $this->testValidateData();
+        $this->testValidate();
         $this->testValidateState();
         $this->testValidateFrom();
         $this->testValidateTo();
         $this->outputResults();
     }
 
-    public function testValidateData()
+    public function testValidate()
     {
         $service = new DateTimeAPIValidatorService();
-        $service->validateData([]);
+        $service->validate([]);
         $expected = ["stateForPublicHolidays is required and must be one of sa, nsw, vic","to is required","from is required"];
         $this->assertSame($expected, $service->errors);
     }

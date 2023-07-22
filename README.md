@@ -1,10 +1,11 @@
 Example URL:
-http://localhost/Aligent/index.php?stateForPublicHolidays=sa&to=2024-01-01&from=2023-01-01
+http://localhost/index.php?stateForPublicHolidays=sa&to=2024-01-01&from=2023-01-01
 
 Can also be posted as JSON body to:
-http://localhost/Aligent/index.php
+http://localhost/index.php
 
-Rather than use parameters in the request, the response returns all possibilities
+Run Unit Tests:
+http://localhost/index.php?runTests
 
 Create a Web API that can be used to:
 1. Find out the number of days between two datetime parameters.

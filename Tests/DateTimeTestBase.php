@@ -29,6 +29,12 @@ abstract class DateTimeTestBase
             if (is_array($actual)) {
                 $actual = json_encode($actual);
             }
+            if (is_bool($expected)) {
+                $expected = $expected ? "true" : "false";
+            }
+            if (is_bool($actual)) {
+                $actual = $actual ? "true" : "false";
+            }
             $trace0 = debug_backtrace()[0];
             $trace1 = debug_backtrace()[1];
             $this->failures[] = "Expected " . $expected . ", Actual " . $actual . " at " . $trace1["function"] . " #" . $trace0["line"];

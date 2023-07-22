@@ -21,7 +21,7 @@ class DateTimeAPIValidatorService
     public $toTimezone;
     public $errors = [];
 
-    public function validateData($data): void
+    public function validate($data): void
     {
         $this->validateState($data);
         $this->validateTo($data);
