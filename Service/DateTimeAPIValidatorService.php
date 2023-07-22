@@ -8,7 +8,7 @@ use DateTimeZone;
 use Exception;
 
 /**
- * If I had time I would ideally use something like Lumen's validator
+ * Ideally would use something like Lumen's validator
  * https://laravel.com/docs/10.x/validation#available-validation-rules
  */
 class DateTimeAPIValidatorService
@@ -21,16 +21,16 @@ class DateTimeAPIValidatorService
     public $toTimezone;
     public $errors = [];
 
-    public function validateFromRequestData($request): void
+    public function validateData($data): void
     {
-        $this->validateState($request);
-        $this->validateTo($request);
-        $this->validateFrom($request);
+        $this->validateState($data);
+        $this->validateTo($data);
+        $this->validateFrom($data);
     }
 
-    public function validateState($request): void
+    public function validateState($data): void
     {
-        $this->state = $request["stateForPublicHolidays"] ?? null;
+        $this->state = $data["stateForPublicHolidays"] ?? null;
         $allStatesString = implode(", ", DateTimeAPIController::ALL_STATES);
         if (!isset($this->state)) {
             $this->errors[] = "stateForPublicHolidays is required and must be one of $allStatesString";
@@ -39,44 +39,35 @@ class DateTimeAPIValidatorService
         }
     }
 
-    public function validateTo($request): void
+    public function validateTo($data): void
     {
-        $this->to = $request["to"] ?? null;
-        $this->toTimezone = $request["toTimezone"] ?? "Australia/Adelaide";
-
-        if (!isset($this->to)) {
-            $this->errors[] = "to is required";
-        } else {
-            try {
-                if (isset($this->toTimezone) && !in_array($this->toTimezone, DateTimeZone::listIdentifiers())) {
-                    $this->errors[] = "to timezone must in a format similar to Australia/Adelaide";
-                } else {
-                    $this->to = new DateTime($this->to, new DateTimeZone($this->toTimezone));
-                }
-            } catch (Exception $e) {
-                $this->errors[] = "Invalid Date Time format for 'to'";
-            }
-        }
+        $this->to = $data["to"] ?? null;
+        $this->toTimezone = $data["toTimezone"] ?? "Australia/Adelaide";
+        $this->to = $this->validateFromOrToDate($this->to, $this->toTimezone, "to");
     }
 
-    public function validateFrom($request): void
+    public function validateFrom($data): void
     {
-        $this->from = $request["from"] ?? null;
-        $this->fromTimezone = $request["fromTimezone"] ?? "Australia/Adelaide";
+        $this->from = $data["from"] ?? null;
+        $this->fromTimezone = $data["fromTimezone"] ?? "Australia/Adelaide";
+        $this->from = $this->validateFromOrToDate($this->from, $this->fromTimezone, "from");
+    }
 
-        if (!isset($this->from)) {
-            $this->errors[] = "from is required";
+    public function validateFromOrToDate($date, $timezone, $field) {
+        if (!isset($date)) {
+            $this->errors[] = "$field is required";
         } else {
             try {
-                if (isset($this->fromTimezone) && !in_array($this->fromTimezone, DateTimeZone::listIdentifiers())) {
-                    $this->errors[] = "from timezone must in a format similar from Australia/Adelaide";
+                if (isset($timezone) && !in_array($timezone, DateTimeZone::listIdentifiers())) {
+                    $this->errors[] = "$field timezone must in a format similar to Australia/Adelaide";
                 } else {
-                    $this->from = new DateTime($this->from, new DateTimeZone($this->fromTimezone));
+                    $date = new DateTime($date, new DateTimeZone($timezone));
                 }
             } catch (Exception $e) {
-                $this->errors[] = "Invalid Date Time format for 'from'";
+                $this->errors[] = "Invalid Date Time format for '$field'";
             }
         }
+        return $date;
     }
 
 }

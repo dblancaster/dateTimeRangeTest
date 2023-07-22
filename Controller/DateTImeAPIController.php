@@ -25,16 +25,22 @@ class DateTimeAPIController
         $this->service = new DateTimeService();
     }
 
-    public function init($request)
+    public function init()
     {
+        $json = file_get_contents('php://input');
+        if (!empty($json)) {
+            $data = json_decode($json, true);
+        } else {
+            $data = $_REQUEST;
+        }
         header('Content-Type: application/json');
-        print json_encode($this->getResponseData($request));
+        print json_encode($this->getResponseData($data));
     }
 
-    public function getResponseData($request): array
+    public function getResponseData($data): array
     {
         $validator = new DateTimeAPIValidatorService();
-        $validator->validateFromRequestData($request);
+        $validator->validateData($data);
         if ($validator->errors) {
             return ["errors" => $validator->errors];
         }
