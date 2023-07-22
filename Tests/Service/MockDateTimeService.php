@@ -2,8 +2,6 @@
 
 namespace Tests;
 
-require_once "Service/DateTimeService.php";
-
 use Data\CalculatedResponseData;
 use DateTime;
 use Services\DateTimeService;

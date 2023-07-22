@@ -4,18 +4,18 @@ use Controller\DateTimeAPIController;
 use Tests\DateTimeAPIValidatorServiceTest;
 use Tests\DateTimeServiceTest;
 
-include "Controller/DateTimeAPIController.php";
-include "Data/CalculatedResponseData.php";
-include "Data/PublicHoliday.php";
-include "Service/DateTimeAPIValidatorService.php";
-include "Service/DateTimeService.php";
+require_once"Controller/DateTimeAPIController.php";
+require_once"Data/CalculatedResponseData.php";
+require_once"Data/PublicHoliday.php";
+require_once"Service/DateTimeAPIValidatorService.php";
+require_once"Service/DateTimeService.php";
 
 if (isset($_GET["runTests"])) {
-    include "Tests/DateTimeTestBase.php";
-    include "Tests/Service/MockDateTimeService.php";
-    include "Tests/Service/DateTimeServiceTest.php";
-    include "Tests/Service/DateTimeAPIValidatorServiceTest.php";
-    include "Tests/Controller/DateTimeAPIControllerTest.php";
+    require_once"Tests/DateTimeTestBase.php";
+    require_once"Tests/Service/MockDateTimeService.php";
+    require_once"Tests/Service/DateTimeServiceTest.php";
+    require_once"Tests/Service/DateTimeAPIValidatorServiceTest.php";
+    require_once"Tests/Controller/DateTimeAPIControllerTest.php";
 
     (new DateTimeServiceTest())->runTests();
     (new DateTimeAPIValidatorServiceTest())->runTests();
