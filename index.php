@@ -22,5 +22,5 @@ if (isset($_GET["runTests"])) {
     (new DateTimeAPIControllerTest())->runTests();
 } else {
     $controller = new DateTimeAPIController();
-    $controller->init($_REQUEST);
+    $controller->init();
 }
